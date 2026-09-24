@@ -1,0 +1,90 @@
+/* ==========================================================================
+   SidePanel — Issue #8: Frontend Key Submission Vault & Failure Animation
+   References: docs/FEATURES.md §3.2 (Incorrect Submission Handling)
+               docs/UI-UX.md §3.4 (Key Submission Widget)
+   ========================================================================== */
+
+/* ── Monospace FLAG{...} Input ── */
+.vault-key-input {
+  width: 100%;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.vault-key-input:focus {
+  border-color: var(--accent);
+}
+
+.vault-key-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Red border feedback — held for 2 seconds after an incorrect submission */
+.vault-key-input--error {
+  border-color: var(--error);
+}
+
+/* 8-frame CSS horizontal shake — FEATURES.md §3.2:
+   `animation: shake 0.4s ease-in-out` (8 intervals of 12.5% each) */
+.vault-key-input--shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  12.5% {
+    transform: translateX(-8px);
+  }
+  25% {
+    transform: translateX(8px);
+  }
+  37.5% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+  62.5% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+  87.5% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* ── Status Label ── */
+.vault-status {
+  margin: 0;
+  min-height: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.vault-status--error {
+  color: var(--error);
+}
+
+.vault-status--success {
+  color: var(--accent);
+}
+
+.vault-status--warning {
+  color: var(--warning);
+}

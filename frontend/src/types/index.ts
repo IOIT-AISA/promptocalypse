@@ -32,3 +32,36 @@ export interface SessionState {
   active_cooldown_until: number | null;
   local_chat_history: Record<string, ChatMessage[]>;
 }
+
+/** Result statuses returned by POST /api/submit-key (backend scoring engine). */
+export type SubmitKeyStatus = 'incorrect' | 'correct' | 'completed';
+
+/** Per-category penalty breakdown returned on arena completion. */
+export interface ScoreStats {
+  base_points: number;
+  total_prompts: number;
+  prompt_penalty: number;
+  elapsed_minutes: number;
+  time_penalty: number;
+  failed_attempts: number;
+  fail_penalty: number;
+  final_score: number;
+}
+
+/** Mirrors backend SubmitKeyResponse (backend/app/models.py). */
+export interface SubmitKeyResponse {
+  status: SubmitKeyStatus;
+  unlocked_level?: number | null;
+  message: string;
+  penalty_points?: number | null;
+  final_score?: number | null;
+  completion_time?: string | null;
+  stats?: ScoreStats | null;
+}
+
+/** Final run data handed upward when Level 3 is completed. */
+export interface VictoryData {
+  final_score: number;
+  completion_time: string;
+  stats: ScoreStats;
+}
