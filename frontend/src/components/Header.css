@@ -182,3 +182,25 @@
 .hud-metric__value--score-danger {
   color: var(--error);
 }
+
+.hud-metric__value--time-warning {
+  color: #ffb020;
+  animation: pulse-amber 2s infinite;
+}
+
+.hud-metric__value--time-danger {
+  color: #ff3b5c;
+  animation: pulse-red 1s infinite;
+}
+
+@keyframes pulse-amber {
+  0% { text-shadow: 0 0 5px rgba(255, 176, 32, 0.2); }
+  50% { text-shadow: 0 0 15px rgba(255, 176, 32, 0.8); }
+  100% { text-shadow: 0 0 5px rgba(255, 176, 32, 0.2); }
+}
+
+@keyframes pulse-red {
+  0% { text-shadow: 0 0 5px rgba(255, 59, 92, 0.2); }
+  50% { text-shadow: 0 0 20px rgba(255, 59, 92, 1); transform: scale(1.02); }
+  100% { text-shadow: 0 0 5px rgba(255, 59, 92, 0.2); transform: scale(1); }
+}

@@ -92,6 +92,12 @@ async def submit_key(request: SubmitKeyRequest, limiter: Annotated[KeySubmission
 
     outcome = result["status"]
 
+    if outcome == "time_limit_exceeded":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Time limit exceeded. Arena locked.",
+        )
+
     if outcome == STATUS_NOT_FOUND:
         logger.warning(
             "Flag submission rejected: user not found",
