@@ -183,6 +183,19 @@ async def verify_and_progress(
                 "message": "Challenge already completed",
             }
 
+        # Issue #55: 120-minute global time limit
+        if elapsed_minutes(start_time, now_iso) >= 120:
+            final_score = calculate_final_score(prompts, 120, fails)
+            await db.execute(
+                "UPDATE users SET completed_at = ?, final_score = ? WHERE id = ?",
+                (now_iso, final_score, user_id)
+            )
+            await db.commit()
+            return {
+                "status": "time_limit_exceeded",
+                "message": "Time limit exceeded. Arena locked.",
+            }
+
         target_key = LEVEL_KEYS[level]
         # Constant-time comparison prevents timing side-channels (FEATURES 3.1)
         is_correct = hmac.compare_digest(

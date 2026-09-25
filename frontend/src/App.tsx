@@ -5,7 +5,7 @@ import SidePanel from './components/SidePanel.tsx'
 import VictoryModal from './components/VictoryModal.tsx'
 import RegisterModal from './components/RegisterModal.tsx'
 import type { SessionState, SubmitKeyResponse } from './types'
-import { loadSession, hasValidSession, SESSION_UPDATE_EVENT } from './utils/session'
+import { loadSession, hasValidSession, SESSION_UPDATE_EVENT, saveSession, calculateDynamicScore } from './utils/session'
 
 export default function App() {
   const [session, setSession] = useState<SessionState | null>(() => {
@@ -14,6 +14,36 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return hasValidSession()
   })
+
+  useEffect(() => {
+    const handleTimeout = () => {
+      const current = loadSession()
+      if (current && !current.completed) {
+        const finalScore = calculateDynamicScore({
+          prompts: current.total_prompts || 0,
+          elapsedSeconds: 7200,
+          failedAttempts: current.failed_attempts || 0,
+        })
+        const updated = { ...current, completed: true, final_score: finalScore }
+        saveSession(updated)
+        setSession(updated)
+        setShowVictory(true)
+        setFinalScore(finalScore)
+        setVictoryStats({
+          base_points: 1000,
+          total_prompts: current.total_prompts || 0,
+          prompt_penalty: 0,
+          elapsed_minutes: 120,
+          time_penalty: 120 * 2,
+          failed_attempts: current.failed_attempts || 0,
+          fail_penalty: (current.failed_attempts || 0) * 25,
+          final_score: finalScore
+        })
+      }
+    }
+    window.addEventListener('ARENA_TIMEOUT', handleTimeout)
+    return () => window.removeEventListener('ARENA_TIMEOUT', handleTimeout)
+  }, [])
 
   useEffect(() => {
     const handleUpdate = (e: Event) => {

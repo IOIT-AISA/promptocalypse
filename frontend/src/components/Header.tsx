@@ -68,6 +68,15 @@ export default function Header({ session: propSession }: HeaderProps) {
     return Math.max(0, Math.floor((Date.now() - startMs) / 1000))
   })
 
+  const remainingSeconds = Math.max(0, 7200 - elapsedSeconds)
+
+  useEffect(() => {
+    if (remainingSeconds === 0 && !completed && internalSession.start_time) {
+      const evt = new CustomEvent('ARENA_TIMEOUT');
+      window.dispatchEvent(evt);
+    }
+  }, [remainingSeconds, completed, internalSession.start_time])
+
   useEffect(() => {
     // If completed or start_time is missing, don't run the ticker
     if (completed || !internalSession.start_time) {
@@ -175,8 +184,14 @@ export default function Header({ session: propSession }: HeaderProps) {
         {/* Stopwatch Timer */}
         <div className="hud-metric">
           <span className="hud-metric__label">TIME:</span>
-          <span className="hud-metric__value hud-metric__value--time">
-            {formatElapsedTime(elapsedSeconds)}
+          <span className={`hud-metric__value hud-metric__value--time ${
+            remainingSeconds <= 300 
+              ? 'hud-metric__value--time-danger' 
+              : remainingSeconds <= 900 
+                ? 'hud-metric__value--time-warning' 
+                : ''
+          }`}>
+            {formatElapsedTime(remainingSeconds)}
           </span>
         </div>
 
