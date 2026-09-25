@@ -1,0 +1,63 @@
+/* ==========================================================================
+   Collapsible Leaderboard Drawer — Issue #57
+   ========================================================================== */
+
+.leaderboard-toggle {
+  position: fixed;
+  top: 4.5rem;
+  right: 1rem;
+  z-index: 40;
+  padding: 0.5rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background-color: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.leaderboard-toggle:hover {
+  background-color: var(--surface-elevated);
+}
+
+.right-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: min(24rem, 90vw);
+  height: 100vh;
+  padding: 1rem;
+  background-color: var(--surface);
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
+  overflow-y: auto;
+  /* slide-in/slide-out; visibility keeps the closed drawer out of the tab order */
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 0.3s ease, visibility 0.3s;
+}
+
+.right-drawer--open {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.right-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.right-drawer__title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
