@@ -132,6 +132,7 @@ export default function KeyVault({ onVictory, onSubmitKey }: KeyVaultProps) {
         <input
           type="text"
           className={`vault-input${isShaking ? ' vault-input--shake' : ''}`}
+          aria-label="Secret Flag Key"
           placeholder={isCompleted ? 'Arena Cleared' : 'FLAG{...}'}
           value={keyInput}
           onChange={(e) => setKeyInput(e.target.value)}
