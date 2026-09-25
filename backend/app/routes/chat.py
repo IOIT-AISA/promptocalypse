@@ -181,14 +181,13 @@ async def chat(
                     "upstream_latency_ms": 0,
                     "total_latency_ms": total_latency_ms,
                     "provider": settings.GROQ_MODEL,
-                    "status_code": status.HTTP_200_OK,
+                    "status_code": status.HTTP_400_BAD_REQUEST,
                     "prompt": request.prompt,
                 },
             )
-            return ChatResponse(
-                reply=L2_FIREWALL_ALERT_REPLY,
-                status="blocked",
-                cooldown_seconds=settings.COOLDOWN_SECONDS,
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=L2_FIREWALL_ALERT_REPLY,
             )
 
         # Step 5: Dispatch LLM Inference call
