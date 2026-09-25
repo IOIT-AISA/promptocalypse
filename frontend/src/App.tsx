@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Header from './components/Header.tsx'
 import ArenaPanel from './components/ArenaPanel.tsx'
 import SidePanel from './components/SidePanel.tsx'
+import RightDrawer from './components/RightDrawer.tsx'
 import VictoryModal from './components/VictoryModal.tsx'
 import RegisterModal from './components/RegisterModal.tsx'
 import type { SessionState, SubmitKeyResponse } from './types'
@@ -38,6 +39,7 @@ export default function App() {
     const s = loadSession()
     return Boolean(s?.completed)
   })
+  const [leaderboardOpen, setLeaderboardOpen] = useState<boolean>(false)
   const [victoryStats, setVictoryStats] = useState<SubmitKeyResponse['stats'] | null>(null)
   const [finalScore, setFinalScore] = useState<number | null>(() => {
     const s = loadSession()
@@ -68,6 +70,10 @@ export default function App() {
         <ArenaPanel session={session} />
         <SidePanel onVictory={handleVictory} />
       </main>
+      <RightDrawer
+        open={leaderboardOpen}
+        onToggle={() => setLeaderboardOpen((o) => !o)}
+      />
       {showVictory && (
         <VictoryModal
           isOpen={showVictory}
