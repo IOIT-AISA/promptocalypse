@@ -365,6 +365,7 @@ export default function ChatTerminal({
           <textarea
             ref={textareaRef}
             className="chat-terminal__textarea"
+            aria-label="Injection Prompt"
             placeholder="Type injection prompt..."
             rows={3}
             value={input}
